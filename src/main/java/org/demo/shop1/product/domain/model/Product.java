@@ -1,7 +1,6 @@
 package org.demo.shop1.product.domain.model;
 
 import java.util.Date;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @Id
-    private Integer id;
+    private String id;
 
     @NotEmpty
     private String sku;
@@ -38,7 +37,7 @@ public class Product {
     @NotNull
     private Double unitPrice;
 
-    private Set<String> imageUrl;
+    private String imageUrl;
 
     private Boolean active;
 

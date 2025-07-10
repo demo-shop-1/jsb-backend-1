@@ -1,5 +1,7 @@
 package org.demo.shop1.product.application.command;
 
+import java.util.Calendar;
+
 import org.demo.shop1.product.domain.model.Product;
 import org.demo.shop1.product.domain.repository.ProductCommandRepository;
 import org.demo.shop1.product.domain.service.ProductSave;
@@ -16,6 +18,7 @@ public class ProductSaveService implements ProductSave {
 
     @Override
     public Mono<Product> save(Product product) {
+        product.setDateCreated(Calendar.getInstance().getTime());
         return productCommandRepository.save(product);
     }
 

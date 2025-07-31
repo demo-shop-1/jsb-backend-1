@@ -1,6 +1,6 @@
 package org.demo.shop1.modules.products.adapters.db;
 
-import org.demo.shop1.modules.products.domain.enums.ProductEnum;
+import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductSaveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.event.ReactiveBeforeConvertCallback;
@@ -21,7 +21,7 @@ public class ProductValidationMongo<ProductEntity> implements ReactiveBeforeConv
     public @NonNull Mono<ProductEntity> onBeforeConvert(@NonNull ProductEntity entity, @NonNull String collection) {
         return Mono.just(validator.validate(entity)).flatMapMany(Flux::fromIterable).flatMap(error -> {
             // Throw an error for each validator's error
-            return Mono.error(new ProductSaveException(ProductEnum.PRODUCT_ERROR.code, error.getMessage()));
+            return Mono.error(new ProductSaveException(ProductMessageEnum.PRODUCT_ERROR.code, error.getMessage()));
         }).then(Mono.just(entity));
     }
 

@@ -40,6 +40,7 @@ public class ProductEntity {
 
     private String imageUrl;
 
+    @NotNull(message = "Active is required")
     private Boolean isActive;
 
     @NotNull(message = "Units In Stock is required")

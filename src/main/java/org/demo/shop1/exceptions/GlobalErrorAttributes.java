@@ -26,7 +26,11 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         request, options);
 
     global.setMessageRaw(error.getMessage());
-    global.setMessageCode(error.getCause().getMessage());
+
+    if (error.getCause() != null) {
+      global.setMessageCode(error.getCause().getMessage());
+    }
+
     global.setStatus(map.get("error").toString());
     global.setStatusCode(Integer.parseInt(map.get("status").toString()));
     global.setDate(Calendar.getInstance().getTime().toString());

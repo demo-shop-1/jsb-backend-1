@@ -1,5 +1,6 @@
 package org.demo.shop1.modules.products.application;
 
+import org.demo.shop1.modules.products.domain.enums.ProductEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductSkuException;
 import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.ports.out.ProductQueryOutRepository;
@@ -20,7 +21,7 @@ public class ProductQueryApplication implements ProductQueryService {
     public Mono<Product> findBySku(String sku) {
         return Mono.justOrEmpty(sku).flatMap(s -> {
             if (ObjectUtils.isBlankString(sku)) {
-                throw new ProductSkuException(1, "SKU is blank");
+                throw new ProductSkuException(ProductEnum.SKU_BLANK.code, ProductEnum.SKU_BLANK.message);
             }
 
             return productQueryRepository.findBySku(sku);

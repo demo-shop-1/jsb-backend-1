@@ -3,6 +3,7 @@ package org.demo.shop1.modules.products.application;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
+import org.demo.shop1.modules.products.domain.enums.ProductEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductException;
 import org.demo.shop1.modules.products.domain.exceptions.ProductSaveException;
 import org.demo.shop1.modules.products.domain.models.Product;
@@ -29,12 +30,11 @@ public class ProductCommandApplication implements ProductCommandService {
 
         logger.info(String.format("Creating product. Name: %s, SKU: %s", product.getName(), product.getSku()));
 
-        // Validate unique SKU
         return productQueryService.findBySku(product.getSku())
                 .doOnNext(result -> {
-                    // validate if product exists or not
+                    // validate unique SKU
                     if (result != null) {
-                        throw new ProductSaveException(12, "SKU has been repeated");
+                        throw new ProductSaveException(ProductEnum.SKU_REPEAT.code, ProductEnum.SKU_REPEAT.message);
                     }
                 })
                 .switchIfEmpty(Mono.just(product).flatMap(p -> {

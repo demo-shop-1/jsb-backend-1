@@ -8,7 +8,7 @@ public enum ProductMessageEnum {
     // field CODE has to be unique
     PRODUCT_ERROR("PROD-1", "There is an error with this product"),
     SKU_BLANK("PROD-2", "SKU is blank"),
-    SKU_REPEAT("PROD-3", "SKU already exists"),
+    SKU_REPEATED("PROD-3", "This SKU already exists"),
     NAME_BLANK("PROD-4", "Name is blank"),
     CATEGORY_NULL("PROD-4", "Category is emtpy"),
     DESCRIPTION_BLANK("PROD-5", "Description is blank"),

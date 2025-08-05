@@ -32,8 +32,8 @@ public class ProductCommandController extends ProductController {
                                 .flatMap(ProductMapper::toProduct)
                                 .flatMap(productCommandService::createProduct)
                                 .flatMap(ProductMapper::toProductSaveResponse)
-                                .flatMap(p -> ServerResponse.ok().bodyValue(p))
-                                .doOnSuccess(r -> endMethod("/product/save")))
+                                .flatMap(productResponseDTO -> ServerResponse.ok().bodyValue(productResponseDTO))
+                                .doOnSuccess(serverResponse -> endMethod("/product/save")))
                 .build();
     }
 }

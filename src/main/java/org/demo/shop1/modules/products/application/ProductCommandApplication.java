@@ -9,6 +9,7 @@ import org.demo.shop1.modules.products.domain.ports.out.ProductCommandOutReposit
 import org.demo.shop1.modules.products.domain.services.ProductCommandService;
 import org.demo.shop1.modules.products.domain.services.ProductQueryService;
 import org.demo.shop1.modules.products.domain.services.ProductValidationService;
+import org.demo.shop1.modules.products.domain.utils.ProductUtil;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -29,30 +30,29 @@ public class ProductCommandApplication extends ProductApplication implements Pro
     }
 
     @Override
-    public Mono<Product> createProduct(Product productParam) throws ProductCommandException {
-        startMethod("createProduct");
+    public Mono<Product> createProduct(Product product) throws ProductCommandException {
 
-        return productQueryService.findBySku(productParam.getSku())
+        return productQueryService.findBySku(product.getSku())
+                .doFirst(() -> startMethod("createProduct"))
                 // validate unique SKU
                 .flatMap(existingProduct -> {
                     infoMethod("createProduct",
                             String.format("Exists a product with this SKU: %s", existingProduct.getSku()));
-                    return Mono.<Product>error(new ProductCommandException(ProductMessageEnum.SKU_REPEAT.code,
-                            ProductMessageEnum.SKU_REPEAT.message));
+                    return ProductUtil.error(ProductMessageEnum.SKU_REPEATED);
                 })
-                .switchIfEmpty(Mono.defer(() -> productValidationService.validateBeforeSave(productParam)
+                .switchIfEmpty(Mono.defer(() -> productValidationService.validateBeforeSave(product)
                         .flatMap(productValidated -> {
 
-                            infoMethod("createProduct", String.format("Creating product. Name: %s, SKU: %s",
-                                    productParam.getName(), productParam.getSku()));
+                            infoMethod("createProduct", String.format("Creating product with name: %s, SKU: %s",
+                                    product.getName(), product.getSku()));
 
                             // Set current date
                             productValidated.setDateCreated(Calendar.getInstance().getTime());
                             // Set current active product
                             productValidated.setIsActive(true);
 
-                            endMethod("createProduct");
                             return productCommandRepository.save(productValidated);
-                        })));
+                        })))
+                .doOnSuccess(productResult -> endMethod("createProduct"));
     }
 }

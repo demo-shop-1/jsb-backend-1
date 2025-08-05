@@ -19,14 +19,10 @@ public class ProductQueryApplication implements ProductQueryService {
 
     @Override
     public Mono<Product> findBySku(String sku) {
-        return Mono.justOrEmpty(sku).flatMap(s -> {
-            if (ObjectUtils.isBlankString(sku)) {
-                throw new ProductQueryException(ProductMessageEnum.SKU_BLANK.code,
-                        ProductMessageEnum.SKU_BLANK.message);
-            }
-
-            return productQueryRepository.findBySku(sku);
-        });
+        return Mono.defer(() -> (ObjectUtils.isBlankString(sku))
+                ? Mono.error(new ProductQueryException(ProductMessageEnum.SKU_BLANK.code,
+                        ProductMessageEnum.SKU_BLANK.message))
+                : productQueryRepository.findBySku(sku));
     }
 
 }

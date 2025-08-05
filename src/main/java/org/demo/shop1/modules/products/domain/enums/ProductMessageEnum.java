@@ -20,16 +20,15 @@ public enum ProductMessageEnum {
 
     private static final Map<String, ProductMessageEnum> BY_CODE = new HashMap<>();
     private static final Map<String, ProductMessageEnum> BY_MESSAGE = new HashMap<>();
-
-    static {
-        for (ProductMessageEnum e : values()) {
-            BY_CODE.put(e.code, e);
-            BY_MESSAGE.put(e.message, e);
-        }
-    }
-
     public final String code;
     public final String message;
+
+    static {
+        for (ProductMessageEnum value : values()) {
+            BY_CODE.put(value.code, value);
+            BY_MESSAGE.put(value.message, value);
+        }
+    }
 
     private ProductMessageEnum(String code, String message) {
         this.code = code;

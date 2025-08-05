@@ -2,7 +2,7 @@ package org.demo.shop1.modules.products.application.validation;
 
 import org.demo.shop1.modules.products.domain.enums.ProductIntegerEnum;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
-import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
+import org.demo.shop1.modules.products.domain.exceptions.ProductValidationException;
 import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.services.ProductValidationService;
 import org.demo.shop1.utils.ObjectUtils;
@@ -16,56 +16,58 @@ import reactor.core.publisher.Mono;
 public class ProductValidationApplication implements ProductValidationService {
 
     @Override
-    public Mono<Product> validateBeforeSave(Product productParam) throws ProductCommandException {
-        return Mono.just(productParam).flatMap(product -> {
+    public Mono<Product> validateBeforeSave(Product product) throws ProductValidationException {
+        return Mono.defer(() -> {
+            Mono<Product> result = null;
             // validate SKU
             if (ObjectUtils.isBlankString(product.getSku())) {
-                throw new ProductCommandException(ProductMessageEnum.SKU_BLANK.code, ProductMessageEnum.SKU_BLANK.message);
+                result = error(ProductMessageEnum.SKU_BLANK);
             }
             if (product.getSku().length() < ProductIntegerEnum.SKU_MIN_SIZE.value) {
-                throw new ProductCommandException(ProductMessageEnum.SKU_MIN.code, ProductMessageEnum.SKU_MIN.message);
+                result = error(ProductMessageEnum.SKU_MIN);
             }
 
             // validate name
             if (ObjectUtils.isBlankString(product.getName())) {
-                throw new ProductCommandException(ProductMessageEnum.NAME_BLANK.code,
-                        ProductMessageEnum.NAME_BLANK.message);
+                result = error(ProductMessageEnum.NAME_BLANK);
             }
 
             // validate category
             if (product.getCategoryId() == null) {
-                throw new ProductCommandException(ProductMessageEnum.CATEGORY_NULL.code,
-                        ProductMessageEnum.CATEGORY_NULL.message);
+                result = error(ProductMessageEnum.CATEGORY_NULL);
             }
 
             // validate description
             if (ObjectUtils.isBlankString(product.getDescription())) {
-                throw new ProductCommandException(ProductMessageEnum.DESCRIPTION_BLANK.code,
-                        ProductMessageEnum.DESCRIPTION_BLANK.message);
+                result = error(ProductMessageEnum.DESCRIPTION_BLANK);
             }
 
             // validate unit price
             if (product.getUnitPrice() == null) {
-                throw new ProductCommandException(ProductMessageEnum.UNIT_PRICE_NULL.code,
-                        ProductMessageEnum.UNIT_PRICE_NULL.message);
+                result = error(ProductMessageEnum.UNIT_PRICE_NULL);
             }
             if (product.getUnitPrice() < ProductIntegerEnum.UNIT_PRICE_MIN.value) {
-                throw new ProductCommandException(ProductMessageEnum.UNIT_PRICE_MIN.code,
-                        ProductMessageEnum.UNIT_PRICE_MIN.message);
+                result = error(ProductMessageEnum.UNIT_PRICE_MIN);
             }
 
             // validate units in stock
             if (product.getUnitsInStock() == null) {
-                throw new ProductCommandException(ProductMessageEnum.UNIT_IN_STOCK_NULL.code,
-                        ProductMessageEnum.UNIT_IN_STOCK_NULL.message);
+                result = error(ProductMessageEnum.UNIT_IN_STOCK_NULL);
             }
             if (product.getUnitsInStock() < ProductIntegerEnum.UNIT_IN_STOCK_MIN.value) {
-                throw new ProductCommandException(ProductMessageEnum.UNIT_IN_STOCK_MIN.code,
-                        ProductMessageEnum.UNIT_IN_STOCK_MIN.message);
+                result = error(ProductMessageEnum.UNIT_IN_STOCK_MIN);
             }
 
-            return Mono.just(product);
+            if (result == null) {
+                result = Mono.just(product);
+            }
+
+            return result;
         });
+    }
+
+    private Mono<Product> error(ProductMessageEnum message) {
+        return Mono.error(new ProductValidationException(message.code, message.message));
     }
 
 }

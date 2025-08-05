@@ -11,6 +11,7 @@ import org.demo.shop1.modules.products.domain.services.ProductQueryService;
 import org.demo.shop1.modules.products.domain.services.ProductValidationService;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -22,20 +23,22 @@ public class ProductCommandApplication extends ProductApplication implements Pro
     private final ProductQueryService productQueryService;
     private final ProductValidationService productValidationService;
 
+    @PostConstruct
+    public void init() {
+        nameClass = "ProductCommandApplication";
+    }
+
     @Override
     public Mono<Product> createProduct(Product productParam) throws ProductCommandException {
-        startMethod(ProductCommandApplication.class.getName(), "createProduct");
+        nameMethod = "createProduct";
+        startMethod();
 
         return productQueryService.findBySku(productParam.getSku())
-                .doOnNext(result -> {
-                    // validate unique SKU
-                    if (result != null) {
-                        throw new ProductCommandException(ProductMessageEnum.SKU_REPEAT.code,
-                                ProductMessageEnum.SKU_REPEAT.message);
-                    }
-                })
-                .switchIfEmpty(Mono.just(productParam)
-                        .flatMap(productValidationService::validateBeforeSave)
+                // validate unique SKU
+                .flatMap(existingProduct -> Mono
+                        .<Product>error(new ProductCommandException(ProductMessageEnum.SKU_REPEAT.code,
+                                ProductMessageEnum.SKU_REPEAT.message)))
+                .switchIfEmpty(Mono.defer(() -> productValidationService.validateBeforeSave(productParam)
                         .flatMap(productValidated -> {
 
                             logger.info(String.format("Creating product. Name: %s, SKU: %s",
@@ -47,6 +50,6 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                             productValidated.setIsActive(true);
 
                             return productCommandRepository.save(productValidated);
-                        }));
+                        })));
     }
 }

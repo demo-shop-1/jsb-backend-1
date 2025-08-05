@@ -1,10 +1,10 @@
 package org.demo.shop1.modules.products.domain.services;
 
-import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
+import org.demo.shop1.modules.products.domain.exceptions.ProductValidationException;
 import org.demo.shop1.modules.products.domain.models.Product;
 
 import reactor.core.publisher.Mono;
 
 public interface ProductValidationService {
-    Mono<Product> validateBeforeSave(Product product) throws ProductCommandException;
+    Mono<Product> validateBeforeSave(Product product) throws ProductValidationException;
 }

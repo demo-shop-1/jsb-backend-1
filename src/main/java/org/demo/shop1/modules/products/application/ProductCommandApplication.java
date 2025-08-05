@@ -24,9 +24,7 @@ public class ProductCommandApplication extends ProductApplication implements Pro
 
     @Override
     public Mono<Product> createProduct(Product productParam) throws ProductCommandException {
-
-        logger.info(
-                String.format("Creating product. Name: %s, SKU: %s", productParam.getName(), productParam.getSku()));
+        startMethod(ProductCommandApplication.class.getName(), "createProduct");
 
         return productQueryService.findBySku(productParam.getSku())
                 .doOnNext(result -> {
@@ -39,6 +37,9 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                 .switchIfEmpty(Mono.just(productParam)
                         .flatMap(productValidationService::validateBeforeSave)
                         .flatMap(productValidated -> {
+
+                            logger.info(String.format("Creating product. Name: %s, SKU: %s",
+                                    productParam.getName(), productParam.getSku()));
 
                             // Set current date
                             productValidated.setDateCreated(Calendar.getInstance().getTime());

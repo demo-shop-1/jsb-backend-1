@@ -64,7 +64,7 @@ public class ProductCommandApplicationTest {
         // Act and Assert
         StepVerifier.create(productCommandApplication.createProduct(product))
                 .expectErrorMatches(result -> result instanceof ProductCommandException
-                        && result.getMessage().contains(ProductMessageEnum.SKU_REPEAT.message))
+                        && result.getMessage().contains(ProductMessageEnum.SKU_REPEATED.message))
                 .verify();
     }
 }

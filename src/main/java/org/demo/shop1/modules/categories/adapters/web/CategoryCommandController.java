@@ -31,6 +31,7 @@ public class CategoryCommandController extends CategoryController {
                                 .doFirst(() -> startMethod("/category/save"))
                                 .flatMap(CategoryMapper::toCategory)
                                 .flatMap(categoryCommanService::createCategory)
+                                .flatMap(CategoryMapper::toCategorySaveResponse)
                                 .flatMap(categoryResponse -> ServerResponse.ok().bodyValue(categoryResponse))
                                 .doOnSuccess(response -> endMethod("/category/save")))
                 .build();

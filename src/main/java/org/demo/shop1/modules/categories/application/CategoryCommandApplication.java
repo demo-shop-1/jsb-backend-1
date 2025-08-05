@@ -26,6 +26,8 @@ public class CategoryCommandApplication extends CategoryApplication implements C
 
     @Override
     public Mono<Category> createCategory(Category category) {
+        // Validate unique ID
+        // TODO: Validate unique NAME
         return categoryQueryService.findById(category.getId())
                 .doFirst(() -> startMethod("createCategory"))
                 .flatMap(existingCategory -> {
@@ -35,6 +37,10 @@ public class CategoryCommandApplication extends CategoryApplication implements C
                 })
                 .switchIfEmpty(Mono.defer(() -> {
                     infoMethod("createCategory", String.format("Creating category with name: %s", category.getName()));
+
+                    // set current active product
+                    category.setIsActive(true);
+                    
                     return categoryCommandRepository.save(category);
                 }))
                 .doOnSuccess(categoryResult -> endMethod("createCategory"));

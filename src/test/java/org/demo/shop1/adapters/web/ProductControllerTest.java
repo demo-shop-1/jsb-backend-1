@@ -1,6 +1,6 @@
 package org.demo.shop1.adapters.web;
 
-import org.demo.shop1.modules.products.adapters.web.ProductController;
+import org.demo.shop1.modules.products.adapters.web.ProductCommandController;
 import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
 import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.services.ProductCommandService;
@@ -26,7 +26,7 @@ public class ProductControllerTest {
     private ProductCommandService productCommandService;
 
     @InjectMocks
-    private ProductController productController;
+    private ProductCommandController productController;
 
     @BeforeEach
     void setUp() {

@@ -30,18 +30,20 @@ public class ProductCommandApplication extends ProductApplication implements Pro
 
     @Override
     public Mono<Product> createProduct(Product productParam) throws ProductCommandException {
-        nameMethod = "createProduct";
-        startMethod();
+        startMethod("createProduct");
 
         return productQueryService.findBySku(productParam.getSku())
                 // validate unique SKU
-                .flatMap(existingProduct -> Mono
-                        .<Product>error(new ProductCommandException(ProductMessageEnum.SKU_REPEAT.code,
-                                ProductMessageEnum.SKU_REPEAT.message)))
+                .flatMap(existingProduct -> {
+                    infoMethod("createProduct",
+                            String.format("Exists a product with this SKU: %s", existingProduct.getSku()));
+                    return Mono.<Product>error(new ProductCommandException(ProductMessageEnum.SKU_REPEAT.code,
+                            ProductMessageEnum.SKU_REPEAT.message));
+                })
                 .switchIfEmpty(Mono.defer(() -> productValidationService.validateBeforeSave(productParam)
                         .flatMap(productValidated -> {
 
-                            logger.info(String.format("Creating product. Name: %s, SKU: %s",
+                            infoMethod("createProduct", String.format("Creating product. Name: %s, SKU: %s",
                                     productParam.getName(), productParam.getSku()));
 
                             // Set current date
@@ -49,6 +51,7 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                             // Set current active product
                             productValidated.setIsActive(true);
 
+                            endMethod("createProduct");
                             return productCommandRepository.save(productValidated);
                         })));
     }

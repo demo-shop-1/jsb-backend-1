@@ -1,31 +1,22 @@
 package org.demo.shop1.modules.products.adapters.web;
 
-import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
-import org.demo.shop1.modules.products.adapters.mappers.ProductMapper;
-import org.demo.shop1.modules.products.domain.services.ProductCommandService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
+import java.util.logging.Logger;
 
-import lombok.RequiredArgsConstructor;
-
-@Configuration
-@RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductCommandService productCommandService;
+    protected static final Logger logger = Logger.getLogger(ProductController.class.getName());
+    protected String nameClass;
 
-    @Bean
-    public RouterFunction<ServerResponse> productRoute() {
-        return RouterFunctions.route()
-                .POST("/product/save",
-                        req -> req.bodyToMono(ProductSaveRequestDTO.class)
-                                .flatMap(ProductMapper::toProduct)
-                                .flatMap(productCommandService::createProduct)
-                                .flatMap(ProductMapper::toProductSaveResponse)
-                                .flatMap(p -> ServerResponse.ok().bodyValue(p)))
-                .build();
+    protected void infoMethod(String nameMethod, String message) {
+        logger.info(String.format("Info > %s > %s: %s", nameClass, nameMethod, message));
     }
+
+    protected void startMethod(String nameMethod) {
+        logger.info(String.format("Start > %s > %s", nameClass, nameMethod));
+    }
+
+    protected void endMethod(String nameMethod) {
+        logger.info(String.format("End > %s > %s", nameClass, nameMethod));
+    }
+
 }

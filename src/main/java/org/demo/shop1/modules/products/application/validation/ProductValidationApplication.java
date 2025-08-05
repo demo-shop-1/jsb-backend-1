@@ -1,5 +1,6 @@
 package org.demo.shop1.modules.products.application.validation;
 
+import org.demo.shop1.modules.products.application.ProductApplication;
 import org.demo.shop1.modules.products.domain.enums.ProductIntegerEnum;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductValidationException;
@@ -8,17 +9,25 @@ import org.demo.shop1.modules.products.domain.services.ProductValidationService;
 import org.demo.shop1.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class ProductValidationApplication implements ProductValidationService {
+public class ProductValidationApplication extends ProductApplication implements ProductValidationService {
+
+    @PostConstruct
+    public void init() {
+        nameClass = "ProductValidationApplication";
+    }
 
     @Override
     public Mono<Product> validateBeforeSave(Product product) throws ProductValidationException {
         return Mono.defer(() -> {
+            startMethod("validateBeforeSave");
             Mono<Product> result = null;
+            
             // validate SKU
             if (ObjectUtils.isBlankString(product.getSku())) {
                 result = error(ProductMessageEnum.SKU_BLANK);
@@ -61,6 +70,8 @@ public class ProductValidationApplication implements ProductValidationService {
             if (result == null) {
                 result = Mono.just(product);
             }
+
+            endMethod("validateBeforeSave");
 
             return result;
         });

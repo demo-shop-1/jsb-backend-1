@@ -1,9 +1,10 @@
-package org.demo.shop1.modules.products.adapters.db;
+package org.demo.shop1.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 
@@ -11,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
-public class ReactiveMongoConfig {
+public class Shop1Configuration {
 
     private final MongoClient mongoClient;
 
@@ -19,8 +20,12 @@ public class ReactiveMongoConfig {
     private String dataBaseName;
 
     @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }
+
+    @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
         return new ReactiveMongoTemplate(mongoClient, dataBaseName);
     }
-
 }

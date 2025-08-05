@@ -17,7 +17,7 @@ public class ProductCommandMongoRepository implements ProductCommandOutRepositor
 
     @Override
     public Mono<Product> save(Product product) {
-        return mongoTemplate.insert(ProductMapper.toProductEntity(product))
+        return mongoTemplate.insert(ProductMapper.toProductEntity(product), "products")
                 .flatMap(p -> Mono.just(ProductMapper.toProduct(p)));
     }
 

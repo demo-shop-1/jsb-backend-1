@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.logging.Logger;
 
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
-import org.demo.shop1.modules.products.domain.exceptions.ProductSaveException;
+import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
 import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.ports.out.ProductCommandOutRepository;
 import org.demo.shop1.modules.products.domain.services.ProductCommandService;
@@ -25,7 +25,7 @@ public class ProductCommandApplication implements ProductCommandService {
     private final ProductValidationService productValidationService;
 
     @Override
-    public Mono<Product> createProduct(Product productParam) throws ProductSaveException {
+    public Mono<Product> createProduct(Product productParam) throws ProductCommandException {
 
         logger.info(
                 String.format("Creating product. Name: %s, SKU: %s", productParam.getName(), productParam.getSku()));
@@ -34,7 +34,7 @@ public class ProductCommandApplication implements ProductCommandService {
                 .doOnNext(result -> {
                     // validate unique SKU
                     if (result != null) {
-                        throw new ProductSaveException(ProductMessageEnum.SKU_REPEAT.code,
+                        throw new ProductCommandException(ProductMessageEnum.SKU_REPEAT.code,
                                 ProductMessageEnum.SKU_REPEAT.message);
                     }
                 })

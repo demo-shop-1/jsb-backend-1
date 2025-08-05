@@ -2,7 +2,7 @@ package org.demo.shop1.application;
 
 import org.demo.shop1.modules.products.application.ProductCommandApplication;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
-import org.demo.shop1.modules.products.domain.exceptions.ProductSaveException;
+import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
 import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.ports.out.ProductCommandOutRepository;
 import org.demo.shop1.modules.products.domain.services.ProductQueryService;
@@ -37,7 +37,7 @@ public class ProductCommandApplicationTest {
     }
 
     @Test
-    void testCreateProduct_Ok() throws ProductSaveException {
+    void testCreateProduct_Ok() throws ProductCommandException {
         // Arrange
         Product product = new Product();
         product.setSku("BOOK");
@@ -54,7 +54,7 @@ public class ProductCommandApplicationTest {
     }
 
     @Test
-    void testCreateProduct_Nok() throws ProductSaveException {
+    void testCreateProduct_Nok() throws ProductCommandException {
         // Arrange
         Product product = new Product();
         product.setSku("BOOK");
@@ -63,7 +63,7 @@ public class ProductCommandApplicationTest {
 
         // Act and Assert
         StepVerifier.create(productCommandApplication.createProduct(product))
-                .expectErrorMatches(result -> result instanceof ProductSaveException
+                .expectErrorMatches(result -> result instanceof ProductCommandException
                         && result.getMessage().contains(ProductMessageEnum.SKU_REPEAT.message))
                 .verify();
     }

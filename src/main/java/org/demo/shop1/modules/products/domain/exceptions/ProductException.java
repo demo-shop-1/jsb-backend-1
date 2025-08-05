@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ProductException extends RuntimeException {
 
-    public ProductException(String messageCodeParam, String messageRawParam) {
-        super(messageRawParam, new RuntimeException(messageCodeParam));
+    public ProductException(String messageCode, String messageRaw) {
+        super(messageRaw, new RuntimeException(messageCode));
     }
 }

@@ -1,7 +1,7 @@
 package org.demo.shop1.adapters.web;
 
 import org.demo.shop1.modules.products.adapters.web.ProductController;
-import org.demo.shop1.modules.products.domain.exceptions.ProductSaveException;
+import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
 import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.services.ProductCommandService;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,7 +62,7 @@ public class ProductControllerTest {
 
         // Service's Mock
         Mockito.when(productCommandService.createProduct(Mockito.any()))
-                .thenReturn(Mono.error(new ProductSaveException(null, null)));
+                .thenReturn(Mono.error(new ProductCommandException(null, null)));
 
         // Act and Assert
         webTestClient.post()

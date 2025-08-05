@@ -9,74 +9,74 @@ import reactor.core.publisher.Mono;
 
 public class ProductMapper {
 
-    public static ProductEntity toProductEntity(Product productParam) {
+    public static ProductEntity toProductEntity(Product product) {
 
-        ProductEntity product = new ProductEntity();
-        product.setId(productParam.getId());
-        product.setSku(productParam.getSku());
-        product.setName(productParam.getName());
-        product.setCategoryId(productParam.getCategoryId());
-        product.setDescription(productParam.getDescription());
-        product.setUnitPrice(productParam.getUnitPrice());
-        product.setImageUrl(productParam.getImageUrl());
-        product.setIsActive(productParam.getIsActive());
-        product.setUnitsInStock(productParam.getUnitsInStock());
-        product.setDateCreated(productParam.getDateCreated());
-        product.setLastUpdated(productParam.getLastUpdated());
+        ProductEntity productResult = new ProductEntity();
+        productResult.setId(product.getId());
+        productResult.setSku(product.getSku());
+        productResult.setName(product.getName());
+        productResult.setCategoryId(product.getCategoryId());
+        productResult.setDescription(product.getDescription());
+        productResult.setUnitPrice(product.getUnitPrice());
+        productResult.setImageUrl(product.getImageUrl());
+        productResult.setIsActive(product.getIsActive());
+        productResult.setUnitsInStock(product.getUnitsInStock());
+        productResult.setDateCreated(product.getDateCreated());
+        productResult.setLastUpdated(product.getLastUpdated());
 
-        return product;
+        return productResult;
     }
 
-    public static Product toProduct(ProductEntity productParam) {
+    public static Product toProduct(ProductEntity product) {
 
-        Product product = new Product();
-        product.setId(productParam.getId());
-        product.setSku(productParam.getSku());
-        product.setName(productParam.getName());
-        product.setCategoryId(productParam.getCategoryId());
-        product.setDescription(productParam.getDescription());
-        product.setUnitPrice(productParam.getUnitPrice());
-        product.setImageUrl(productParam.getImageUrl());
-        product.setIsActive(productParam.getIsActive());
-        product.setUnitsInStock(productParam.getUnitsInStock());
-        product.setDateCreated(productParam.getDateCreated());
-        product.setLastUpdated(productParam.getLastUpdated());
+        Product productResult = new Product();
+        productResult.setId(product.getId());
+        productResult.setSku(product.getSku());
+        productResult.setName(product.getName());
+        productResult.setCategoryId(product.getCategoryId());
+        productResult.setDescription(product.getDescription());
+        productResult.setUnitPrice(product.getUnitPrice());
+        productResult.setImageUrl(product.getImageUrl());
+        productResult.setIsActive(product.getIsActive());
+        productResult.setUnitsInStock(product.getUnitsInStock());
+        productResult.setDateCreated(product.getDateCreated());
+        productResult.setLastUpdated(product.getLastUpdated());
 
-        return product;
+        return productResult;
     }
 
-    public static Mono<Product> toProductSaveRequest(ProductSaveRequestDTO productRequest) {
+    public static Mono<Product> toProductSaveRequest(ProductSaveRequestDTO product) {
 
-        return Mono.just(productRequest).flatMap(p -> {
+        return Mono.just(product).flatMap(p -> {
 
-            Product product = new Product();
-            product.setSku(p.getSku());
-            product.setName(productRequest.getName());
-            product.setCategoryId(productRequest.getCategoryId());
-            product.setDescription(productRequest.getDescription());
-            product.setUnitPrice(productRequest.getUnitPrice());
-            product.setImageUrl(productRequest.getImageUrl());
-            product.setUnitsInStock(productRequest.getUnitsInStock());
+            Product productResult = new Product();
+            productResult.setSku(p.getSku());
+            productResult.setName(product.getName());
+            productResult.setCategoryId(product.getCategoryId());
+            productResult.setDescription(product.getDescription());
+            productResult.setUnitPrice(product.getUnitPrice());
+            productResult.setImageUrl(product.getImageUrl());
+            productResult.setUnitsInStock(product.getUnitsInStock());
 
-            return Mono.just(product);
+            return Mono.just(productResult);
         });
     }
 
-    public static Mono<ProductSaveResponseDTO> toProductSaveResponse(Product productResponse) {
+    public static Mono<ProductSaveResponseDTO> toProductSaveResponse(Product product) {
 
-        return Mono.just(productResponse).flatMap(p -> {
+        return Mono.just(product).flatMap(p -> {
 
-            ProductSaveResponseDTO product = new ProductSaveResponseDTO();
-            product.setSku(productResponse.getSku());
-            product.setName(productResponse.getName());
-            product.setCategoryId(productResponse.getCategoryId());
-            product.setDescription(productResponse.getDescription());
-            product.setUnitPrice(productResponse.getUnitPrice());
-            product.setImageUrl(productResponse.getImageUrl());
-            product.setUnitsInStock(productResponse.getUnitsInStock());
-            product.setIsActive(productResponse.getIsActive());
+            ProductSaveResponseDTO productResult = new ProductSaveResponseDTO();
+            productResult.setSku(product.getSku());
+            productResult.setName(product.getName());
+            productResult.setCategoryId(product.getCategoryId());
+            productResult.setDescription(product.getDescription());
+            productResult.setUnitPrice(product.getUnitPrice());
+            productResult.setImageUrl(product.getImageUrl());
+            productResult.setUnitsInStock(product.getUnitsInStock());
+            productResult.setIsActive(product.getIsActive());
 
-            return Mono.just(product);
+            return Mono.just(productResult);
         });
     }
 }

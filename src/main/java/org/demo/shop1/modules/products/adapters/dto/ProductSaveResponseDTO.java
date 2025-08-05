@@ -1,15 +1,11 @@
 package org.demo.shop1.modules.products.adapters.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ProductSaveResponseDTO {
-
-    private String sku;
-
-    private String name;
-
-    private Integer categoryId;
+@EqualsAndHashCode(callSuper=false)
+public class ProductSaveResponseDTO extends ProductDTO {
 
     private String description;
 

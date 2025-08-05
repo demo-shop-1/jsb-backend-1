@@ -47,10 +47,10 @@ public class ProductMapper {
 
     public static Mono<Product> toProduct(ProductSaveRequestDTO product) {
 
-        return Mono.just(product).flatMap(p -> {
+        return Mono.defer(() -> {
 
             Product productResult = new Product();
-            productResult.setSku(p.getSku());
+            productResult.setSku(product.getSku());
             productResult.setName(product.getName());
             productResult.setCategoryId(product.getCategoryId());
             productResult.setDescription(product.getDescription());
@@ -63,9 +63,7 @@ public class ProductMapper {
     }
 
     public static Mono<ProductSaveResponseDTO> toProductSaveResponse(Product product) {
-
-        return Mono.just(product).flatMap(p -> {
-
+        return Mono.defer(() -> {
             ProductSaveResponseDTO productResult = new ProductSaveResponseDTO();
             productResult.setSku(product.getSku());
             productResult.setName(product.getName());

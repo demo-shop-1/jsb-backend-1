@@ -1,7 +1,6 @@
 package org.demo.shop1.modules.products.application;
 
 import java.util.Calendar;
-import java.util.logging.Logger;
 
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
@@ -17,9 +16,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class ProductCommandApplication implements ProductCommandService {
+public class ProductCommandApplication extends ProductApplication implements ProductCommandService {
 
-    protected static final Logger logger = Logger.getLogger(ProductCommandApplication.class.getName());
     private final ProductCommandOutRepository productCommandRepository;
     private final ProductQueryService productQueryService;
     private final ProductValidationService productValidationService;

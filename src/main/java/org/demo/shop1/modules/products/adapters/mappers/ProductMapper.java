@@ -45,7 +45,7 @@ public class ProductMapper {
         return productResult;
     }
 
-    public static Mono<Product> toProductSaveRequest(ProductSaveRequestDTO product) {
+    public static Mono<Product> toProduct(ProductSaveRequestDTO product) {
 
         return Mono.just(product).flatMap(p -> {
 

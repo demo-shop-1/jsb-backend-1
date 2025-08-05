@@ -22,7 +22,7 @@ public class ProductController {
         return RouterFunctions.route()
                 .POST("/product/save",
                         req -> req.bodyToMono(ProductSaveRequestDTO.class)
-                                .flatMap(ProductMapper::toProductSaveRequest)
+                                .flatMap(ProductMapper::toProduct)
                                 .flatMap(productCommandService::createProduct)
                                 .flatMap(ProductMapper::toProductSaveResponse)
                                 .flatMap(p -> ServerResponse.ok().bodyValue(p)))

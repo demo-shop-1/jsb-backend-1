@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductCommandController extends ProductController {
 
-    private final ProductCommandService productCommandService;
+    private final ProductCommandService productCommandApplication;
 
     @PostConstruct
     public void init() {
@@ -30,7 +30,7 @@ public class ProductCommandController extends ProductController {
                         req -> req.bodyToMono(ProductSaveRequestDTO.class)
                                 .doFirst(() -> startMethod("/product/save"))
                                 .flatMap(ProductMapper::toProduct)
-                                .flatMap(productCommandService::createProduct)
+                                .flatMap(productCommandApplication::createProduct)
                                 .flatMap(ProductMapper::toProductSaveResponse)
                                 .flatMap(productResponseDTO -> ServerResponse.ok().bodyValue(productResponseDTO))
                                 .doOnSuccess(serverResponse -> endMethod("/product/save")))

@@ -1,5 +1,6 @@
 package org.demo.shop1.modules.products.application.validation;
 
+import org.demo.shop1.modules.categories.domain.services.CategoryQueryService;
 import org.demo.shop1.modules.products.application.ProductApplication;
 import org.demo.shop1.modules.products.domain.enums.ProductIntegerEnum;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
@@ -17,6 +18,8 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class ProductValidationApplication extends ProductApplication implements ProductValidationService {
+
+    private final CategoryQueryService categoryQueryApplication;
 
     @PostConstruct
     public void init() {
@@ -75,5 +78,16 @@ public class ProductValidationApplication extends ProductApplication implements 
         })
                 .doFirst(() -> startMethod("validateBeforeSave"))
                 .doOnSuccess(result -> endMethod("validateBeforeSave"));
+    }
+
+    @Override
+    public Mono<Boolean> validateIfCategoryExist(Product product) {
+        return categoryQueryApplication.findById(product.getCategoryId())
+                .flatMap(existingCategory -> {
+                    return Mono.just(existingCategory != null);
+                })
+                .doFirst(() -> startMethod("validateIfCategoryExist"))
+                .doOnSuccess(categoryResult -> endMethod("validateIfCategoryExist"));
+
     }
 }

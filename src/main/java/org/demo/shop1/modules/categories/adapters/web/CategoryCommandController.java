@@ -2,7 +2,7 @@ package org.demo.shop1.modules.categories.adapters.web;
 
 import org.demo.shop1.modules.categories.adapters.dto.CategorySaveRequestDTO;
 import org.demo.shop1.modules.categories.adapters.mappers.CategoryMapper;
-import org.demo.shop1.modules.categories.domain.services.CategoryCommanService;
+import org.demo.shop1.modules.categories.domain.services.CategoryCommandService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryCommandController extends CategoryController {
 
-    private final CategoryCommanService categoryCommanService;
+    private final CategoryCommandService categoryCommandApplication;
 
     @PostConstruct
     public void init() {
@@ -30,7 +30,7 @@ public class CategoryCommandController extends CategoryController {
                         request -> request.bodyToMono(CategorySaveRequestDTO.class)
                                 .doFirst(() -> startMethod("/category/save"))
                                 .flatMap(CategoryMapper::toCategory)
-                                .flatMap(categoryCommanService::createCategory)
+                                .flatMap(categoryCommandApplication::createCategory)
                                 .flatMap(CategoryMapper::toCategorySaveResponse)
                                 .flatMap(categoryResponse -> ServerResponse.ok().bodyValue(categoryResponse))
                                 .doOnSuccess(response -> endMethod("/category/save")))

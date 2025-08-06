@@ -41,17 +41,17 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                     return ProductUtil.error(ProductMessageEnum.SKU_REPEATED);
                 })
                 .switchIfEmpty(Mono.defer(() -> productValidationService.validateBeforeSave(product)
+                        .flatMap(productValidated -> productValidationService.validateIfCategoryExist(product))
                         .flatMap(productValidated -> {
+                            // Set current date
+                            product.setDateCreated(Calendar.getInstance().getTime());
+                            // Set current active product
+                            product.setIsActive(true);
 
                             infoMethod("createProduct", String.format("Creating product with name: %s, SKU: %s",
                                     product.getName(), product.getSku()));
 
-                            // Set current date
-                            productValidated.setDateCreated(Calendar.getInstance().getTime());
-                            // Set current active product
-                            productValidated.setIsActive(true);
-
-                            return productCommandRepository.save(productValidated);
+                            return productCommandRepository.save(product);
                         })))
                 .doOnSuccess(productResult -> endMethod("createProduct"));
     }

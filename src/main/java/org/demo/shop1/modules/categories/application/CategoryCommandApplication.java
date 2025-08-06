@@ -27,23 +27,24 @@ public class CategoryCommandApplication extends CategoryApplication implements C
     @Override
     public Mono<Category> createCategory(Category category) {
         // Validate unique ID
-        // TODO: Validate unique NAME
+        // Validate unique NAME
         return categoryQueryService.findById(category.getId())
                 .doFirst(() -> startMethod("createCategory"))
-                .flatMap(existingCategory -> {
-                    infoMethod("createCategory",
-                            String.format("Already exist a category with ID: ", existingCategory.getId()));
-                    return CategoryUtil.error(CategoryMessageEnum.ID_REPEATED);
-                })
-                .switchIfEmpty(Mono.defer(() -> {
-                    infoMethod("createCategory", String.format("Creating category with name: %s", category.getName()));
+                .flatMap(existingCategory -> CategoryUtil.error(CategoryMessageEnum.ID_REPEATED))
+                .switchIfEmpty(categoryQueryService.findByName(category.getName())
+                        .flatMap(existingCategory -> CategoryUtil.error(CategoryMessageEnum.NAME_REPEATED))
+                        .switchIfEmpty(Mono.defer(() -> {
+                            infoMethod("createCategory",
+                                    String.format("Creating category with ID: %s and NAME: %s", category.getId(),
+                                            category.getName()));
 
-                    // set current active product
-                    category.setIsActive(true);
-                    
-                    return categoryCommandRepository.save(category);
-                }))
+                            // set current active product
+                            category.setIsActive(true);
+
+                            return categoryCommandRepository.save(category);
+                        })))
                 .doOnSuccess(categoryResult -> endMethod("createCategory"));
+
     }
 
 }

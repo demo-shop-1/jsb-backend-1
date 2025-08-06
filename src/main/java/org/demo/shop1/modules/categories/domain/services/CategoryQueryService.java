@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface CategoryQueryService {
     public Mono<Category> findById(Integer id);
+    public Mono<Category> findByName(String name);
 }

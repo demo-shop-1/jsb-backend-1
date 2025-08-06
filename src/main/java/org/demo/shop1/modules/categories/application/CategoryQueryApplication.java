@@ -1,10 +1,11 @@
 package org.demo.shop1.modules.categories.application;
 
 import org.demo.shop1.modules.categories.domain.enums.CategoryMessageEnum;
-import org.demo.shop1.modules.categories.domain.exceptions.CategoryQueryException;
 import org.demo.shop1.modules.categories.domain.models.Category;
 import org.demo.shop1.modules.categories.domain.ports.out.CategoryQueryOutRepository;
 import org.demo.shop1.modules.categories.domain.services.CategoryQueryService;
+import org.demo.shop1.modules.categories.domain.utils.CategoryUtil;
+import org.demo.shop1.utils.ObjectUtil;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -25,12 +26,19 @@ public class CategoryQueryApplication extends CategoryApplication implements Cat
     @Override
     public Mono<Category> findById(Integer id) {
         return Mono.defer(() -> (id == null || id <= 0)
-                ? Mono.error(new CategoryQueryException(
-                        CategoryMessageEnum.ID_INVALID.code,
-                        CategoryMessageEnum.ID_INVALID.message))
+                ? CategoryUtil.error(CategoryMessageEnum.ID_INVALID)
                 : categoryQueryOutRepository.findById(id))
                 .doFirst(() -> startMethod("findById"))
-                .doOnSuccess(category -> endMethod("findById"));
+                .doFinally(category -> endMethod("findById"));
+    }
+
+    @Override
+    public Mono<Category> findByName(String name) {
+        return Mono.defer(() -> ObjectUtil.isBlankString(name)
+                ? CategoryUtil.error(CategoryMessageEnum.NAME_BLANK)
+                : categoryQueryOutRepository.findByName(name))
+                .doFirst(() -> startMethod("findByName"))
+                .doFinally(category -> endMethod("findByName"));
     }
 
 }

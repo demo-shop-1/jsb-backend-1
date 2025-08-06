@@ -9,7 +9,8 @@ public enum CategoryMessageEnum {
     ID_INVALID("CATE-1", "ID has to be a positive value"),
     ID_REPEATED("CATE-2", "This ID already exists"),
     NAME_REPEATED("CATE-3", "This Name already exists"),
-    CATEGORY_ERROR("CATE-4", "There is an error with this category");
+    CATEGORY_ERROR("CATE-4", "There is an error with this category"),
+    NAME_BLANK("CATE-5", "Name is blank");
 
     private static final Map<String, CategoryMessageEnum> BY_CODE = new HashMap<>();
     private static final Map<String, CategoryMessageEnum> BY_MESSAGE = new HashMap<>();

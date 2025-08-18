@@ -11,4 +11,6 @@ public interface ProductCommandService {
 
     Mono<Product> updateProduct(ProductModel product);
 
+    Mono<Product> deleteProduct(ProductModel product);
+
 }

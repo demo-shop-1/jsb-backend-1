@@ -23,7 +23,7 @@ public class ProductCommandMongoRepository implements ProductCommandOutRepositor
 
     @Override
     public Mono<ProductModel> save(ProductModel product) {
-        return mongoTemplate.insert(ProductMapper.toProductEntity(product), "products")
+        return mongoTemplate.insert(ProductMapper.toProductEntity(product), ProductFieldEnum.COLLECTION_NAME.value)
                 .flatMap(existingProduct -> Mono.just(ProductMapper.toProductModel(existingProduct)));
     }
 
@@ -43,6 +43,16 @@ public class ProductCommandMongoRepository implements ProductCommandOutRepositor
                 .withOptions(FindAndModifyOptions.options().returnNew(true))
                 .findAndModify()
                 .flatMap(existingProduct -> Mono.just(ProductMapper.toProductModel(existingProduct)));
+    }
+
+    @Override
+    public Mono<ProductModel> delete(ProductModel product) {
+        return mongoTemplate
+                .remove(new Query(Criteria.where(ProductFieldEnum.SKU.value).is(product.getSku())),
+                        ProductFieldEnum.COLLECTION_NAME.value)
+                .flatMap(result -> {
+                    return Mono.just(product);
+                });
     }
 
 }

@@ -87,4 +87,22 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                 }))
                 .doOnSuccess(productResult -> endMethod("updateProduct"));
     }
+
+    @Override
+    public Mono<Product> deleteProduct(ProductModel product) {
+        return productQueryService.findBySku(product.getSku())
+                .doFirst(() -> startMethod("deleteProduct"))
+                .cast(ProductModel.class)
+                .flatMap(existingProduct -> {
+                    return productCommandRepository.delete(existingProduct);
+                })
+                .cast(Product.class)
+                .switchIfEmpty(Mono.defer(() -> {
+                    // validate SKU
+                    infoMethod("deleteProduct",
+                            String.format("There's no a product with this SKU: %s", product.getSku()));
+                    return ProductUtil.throwError(ProductMessageEnum.SKU_NOT_EXIST);
+                }))
+                .doOnSuccess(productResult -> endMethod("deleteProduct"));
+    }
 }

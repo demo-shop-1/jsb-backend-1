@@ -1,5 +1,6 @@
 package org.demo.shop1.modules.products.adapters.web;
 
+import org.demo.shop1.modules.products.adapters.dto.ProductDeleteRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductUpdateRequestDTO;
@@ -21,48 +22,62 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class ProductCommandController extends ProductController {
 
-    private final ProductCommandService productCommandApplication;
+        private final ProductCommandService productCommandApplication;
 
-    @PostConstruct
-    public void init() {
-        nameClass = "ProductCommandController";
-    }
+        @PostConstruct
+        public void init() {
+                nameClass = "ProductCommandController";
+        }
 
-    @Bean
-    public RouterFunction<ServerResponse> productRoute() {
-        return RouterFunctions.route()
-                .POST("/product/save",
-                        request -> request.bodyToMono(ProductSaveRequestDTO.class)
-                                .doFirst(() -> startMethod("/product/save"))
-                                .flatMap(ProductMapper::toProduct)
-                                .flatMap(productCommandApplication::createProduct)
-                                .cast(ProductModel.class)
-                                .flatMap(ProductMapper::toProductSaveResponse)
-                                .flatMap(productResponseDTO -> ServerResponse.ok().bodyValue(productResponseDTO))
-                                .doOnSuccess(serverResponse -> endMethod("/product/save")))
-                .POST("/product/save/all",
-                        request -> {
-                            Flux<ProductSaveResponseDTO> responses = request.bodyToFlux(ProductSaveRequestDTO.class)
-                                    .doFirst(() -> startMethod("/product/save/all"))
-                                    .flatMap(ProductMapper::toProduct)
-                                    .flatMap(productCommandApplication::createProduct)
-                                    .cast(ProductModel.class)
-                                    .flatMap(ProductMapper::toProductSaveResponse);
+        @Bean
+        public RouterFunction<ServerResponse> productRoute() {
+                return RouterFunctions.route()
+                                .POST("/product/save", request -> request.bodyToMono(ProductSaveRequestDTO.class)
+                                                .doFirst(() -> startMethod("/product/save"))
+                                                .flatMap(ProductMapper::toProductModel)
+                                                .flatMap(productCommandApplication::createProduct)
+                                                .cast(ProductModel.class)
+                                                .flatMap(ProductMapper::toProductSaveResponse)
+                                                .flatMap(productResponseDTO -> ServerResponse.ok()
+                                                                .bodyValue(productResponseDTO))
+                                                .doOnSuccess(serverResponse -> endMethod(
+                                                                "/product/save")))
+                                .POST("/product/save/all", request -> {
+                                        Flux<ProductSaveResponseDTO> responses = request
+                                                        .bodyToFlux(ProductSaveRequestDTO.class)
+                                                        .doFirst(() -> startMethod("/product/save/all"))
+                                                        .flatMap(ProductMapper::toProductModel)
+                                                        .flatMap(productCommandApplication::createProduct)
+                                                        .cast(ProductModel.class)
+                                                        .flatMap(ProductMapper::toProductSaveResponse);
 
-                            return ServerResponse.ok()
-                                    .contentType(MediaType.APPLICATION_JSON) // streaming JSON
-                                    .body(responses, ProductSaveResponseDTO.class)
-                                    .doOnSuccess(serverResponse -> endMethod("/product/save/all"));
-                        })
-                .PUT("/product/update",
-                        request -> request.bodyToMono(ProductUpdateRequestDTO.class)
-                                .doFirst(() -> startMethod("/product/update"))
-                                .flatMap(ProductMapper::toProduct)
-                                .flatMap(productCommandApplication::updateProduct)
-                                .cast(ProductModel.class)
-                                .flatMap(ProductMapper::toProductUpdateResponse)
-                                .flatMap(productResponseDTO -> ServerResponse.ok().bodyValue(productResponseDTO))
-                                .doOnSuccess(serverResponse -> endMethod("/product/update")))
-                .build();
-    }
+                                        return ServerResponse.ok()
+                                                        .contentType(MediaType.APPLICATION_JSON) // streaming
+                                                                                                 // JSON
+                                                        .body(responses, ProductSaveResponseDTO.class)
+                                                        .doOnSuccess(serverResponse -> endMethod(
+                                                                        "/product/save/all"));
+                                })
+                                .PUT("/product/update", request -> request.bodyToMono(ProductUpdateRequestDTO.class)
+                                                .doFirst(() -> startMethod("/product/update"))
+                                                .flatMap(ProductMapper::toProductModel)
+                                                .flatMap(productCommandApplication::updateProduct)
+                                                .cast(ProductModel.class)
+                                                .flatMap(ProductMapper::toProductUpdateResponse)
+                                                .flatMap(productResponseDTO -> ServerResponse.ok()
+                                                                .bodyValue(productResponseDTO))
+                                                .doOnSuccess(serverResponse -> endMethod(
+                                                                "/product/update")))
+                                .DELETE("/product/delete", request -> request.bodyToMono(ProductDeleteRequestDTO.class)
+                                                .doFirst(() -> startMethod("/product/delete"))
+                                                .flatMap(ProductMapper::toProductModel)
+                                                .flatMap(productCommandApplication::deleteProduct)
+                                                .cast(ProductModel.class)
+                                                .flatMap(ProductMapper::toProductDeleteResponse)
+                                                .flatMap(productResponseDTO -> ServerResponse.ok()
+                                                                .bodyValue(productResponseDTO))
+                                                .doOnSuccess(serverResponse -> endMethod(
+                                                                "/product/delete")))
+                                .build();
+        }
 }

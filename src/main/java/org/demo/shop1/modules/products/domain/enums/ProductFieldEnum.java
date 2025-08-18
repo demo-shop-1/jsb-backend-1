@@ -1,6 +1,7 @@
 package org.demo.shop1.modules.products.domain.enums;
 
 public enum ProductFieldEnum {
+    COLLECTION_NAME("products"),
     SKU("sku"),
     NAME("name"),
     CATEGORY_ID("categoryId"),

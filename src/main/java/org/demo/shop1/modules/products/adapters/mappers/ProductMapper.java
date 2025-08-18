@@ -2,14 +2,16 @@ package org.demo.shop1.modules.products.adapters.mappers;
 
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveResponseDTO;
+import org.demo.shop1.modules.products.adapters.dto.ProductUpdateRequestDTO;
+import org.demo.shop1.modules.products.adapters.dto.ProductUpdateResponseDTO;
 import org.demo.shop1.modules.products.adapters.entities.ProductEntity;
-import org.demo.shop1.modules.products.domain.models.Product;
+import org.demo.shop1.modules.products.domain.models.ProductModel;
 
 import reactor.core.publisher.Mono;
 
 public class ProductMapper {
 
-    public static ProductEntity toProductEntity(Product product) {
+    public static ProductEntity toProductEntity(ProductModel product) {
 
         ProductEntity productResult = new ProductEntity();
         productResult.setId(product.getId());
@@ -27,9 +29,9 @@ public class ProductMapper {
         return productResult;
     }
 
-    public static Product toProduct(ProductEntity product) {
+    public static ProductModel toProductModel(ProductEntity product) {
 
-        Product productResult = new Product();
+        ProductModel productResult = new ProductModel();
         productResult.setId(product.getId());
         productResult.setSku(product.getSku());
         productResult.setName(product.getName());
@@ -45,11 +47,11 @@ public class ProductMapper {
         return productResult;
     }
 
-    public static Mono<Product> toProduct(ProductSaveRequestDTO product) {
+    public static Mono<ProductModel> toProduct(ProductSaveRequestDTO product) {
 
         return Mono.defer(() -> {
 
-            Product productResult = new Product();
+            ProductModel productResult = new ProductModel();
             productResult.setSku(product.getSku());
             productResult.setName(product.getName());
             productResult.setCategoryId(product.getCategoryId());
@@ -62,9 +64,43 @@ public class ProductMapper {
         });
     }
 
-    public static Mono<ProductSaveResponseDTO> toProductSaveResponse(Product product) {
+    public static Mono<ProductModel> toProduct(ProductUpdateRequestDTO product) {
+
+        return Mono.defer(() -> {
+
+            ProductModel productResult = new ProductModel();
+            productResult.setSku(product.getSku());
+            productResult.setName(product.getName());
+            productResult.setCategoryId(product.getCategoryId());
+            productResult.setDescription(product.getDescription());
+            productResult.setUnitPrice(product.getUnitPrice());
+            productResult.setImageUrl(product.getImageUrl());
+            productResult.setUnitsInStock(product.getUnitsInStock());
+            productResult.setIsActive(product.getIsActive());
+
+            return Mono.just(productResult);
+        });
+    }
+
+    public static Mono<ProductSaveResponseDTO> toProductSaveResponse(ProductModel product) {
         return Mono.defer(() -> {
             ProductSaveResponseDTO productResult = new ProductSaveResponseDTO();
+            productResult.setSku(product.getSku());
+            productResult.setName(product.getName());
+            productResult.setCategoryId(product.getCategoryId());
+            productResult.setDescription(product.getDescription());
+            productResult.setUnitPrice(product.getUnitPrice());
+            productResult.setImageUrl(product.getImageUrl());
+            productResult.setUnitsInStock(product.getUnitsInStock());
+            productResult.setIsActive(product.getIsActive());
+
+            return Mono.just(productResult);
+        });
+    }
+
+    public static Mono<ProductUpdateResponseDTO> toProductUpdateResponse(ProductModel product) {
+        return Mono.defer(() -> {
+            ProductUpdateResponseDTO productResult = new ProductUpdateResponseDTO();
             productResult.setSku(product.getSku());
             productResult.setName(product.getName());
             productResult.setCategoryId(product.getCategoryId());

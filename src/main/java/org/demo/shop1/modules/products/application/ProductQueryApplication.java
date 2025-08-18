@@ -1,8 +1,8 @@
 package org.demo.shop1.modules.products.application;
 
+import org.demo.shop1.modules.products.domain.Product;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductQueryException;
-import org.demo.shop1.modules.products.domain.models.Product;
 import org.demo.shop1.modules.products.domain.ports.out.ProductQueryOutRepository;
 import org.demo.shop1.modules.products.domain.services.ProductQueryService;
 import org.demo.shop1.utils.ObjectUtil;
@@ -29,6 +29,7 @@ public class ProductQueryApplication extends ProductApplication implements Produ
                 ? Mono.error(new ProductQueryException(ProductMessageEnum.SKU_BLANK.code,
                         ProductMessageEnum.SKU_BLANK.message))
                 : productQueryRepository.findBySku(sku))
+                .cast(Product.class)
                 .doFirst(() -> startMethod("findBySku"))
                 .doOnSuccess(category -> endMethod("findBySku"));
     }

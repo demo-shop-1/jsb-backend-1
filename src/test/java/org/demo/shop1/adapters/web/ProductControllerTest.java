@@ -2,7 +2,7 @@ package org.demo.shop1.adapters.web;
 
 import org.demo.shop1.modules.products.adapters.web.ProductCommandController;
 import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
-import org.demo.shop1.modules.products.domain.models.Product;
+import org.demo.shop1.modules.products.domain.models.ProductModel;
 import org.demo.shop1.modules.products.domain.services.ProductCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ public class ProductControllerTest {
     @Test
     void testCreateProduct_Ok() throws JsonProcessingException {
 
-        Product product = new Product();
+        ProductModel product = new ProductModel();
         product.setSku("BOOK-TECH-1000");
 
         // Service's Mock
@@ -57,7 +57,7 @@ public class ProductControllerTest {
     @Test
     void testCreateProduct_Nok() throws JsonProcessingException {
 
-        Product product = new Product();
+        ProductModel product = new ProductModel();
         product.setSku("BOOK-TECH-1000");
 
         // Service's Mock

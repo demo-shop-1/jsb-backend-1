@@ -2,10 +2,12 @@ package org.demo.shop1.modules.products.domain.models;
 
 import java.util.Date;
 
+import org.demo.shop1.modules.products.domain.Product;
+
 import lombok.Data;
 
 @Data
-public class Product {
+public class ProductModel implements Product {
 
     private String id;
 

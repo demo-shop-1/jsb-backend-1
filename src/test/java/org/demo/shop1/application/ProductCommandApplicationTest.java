@@ -3,7 +3,7 @@ package org.demo.shop1.application;
 import org.demo.shop1.modules.products.application.ProductCommandApplication;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
-import org.demo.shop1.modules.products.domain.models.Product;
+import org.demo.shop1.modules.products.domain.models.ProductModel;
 import org.demo.shop1.modules.products.domain.ports.out.ProductCommandOutRepository;
 import org.demo.shop1.modules.products.domain.services.ProductQueryService;
 import org.demo.shop1.modules.products.domain.services.ProductValidationService;
@@ -39,7 +39,7 @@ public class ProductCommandApplicationTest {
     @Test
     void testCreateProduct_Ok() throws ProductCommandException {
         // Arrange
-        Product product = new Product();
+        ProductModel product = new ProductModel();
         product.setSku("BOOK");
 
         // Service's Mock
@@ -48,7 +48,7 @@ public class ProductCommandApplicationTest {
         Mockito.when(productCommandOutRepository.save(Mockito.any())).thenReturn(Mono.just(product));
 
         // Act and Assert
-        StepVerifier.create(productCommandApplication.createProduct(product))
+        StepVerifier.create(productCommandApplication.createProduct(product).cast(ProductModel.class))
                 .expectNextMatches(result -> result.getSku().equals("BOOK"))
                 .verifyComplete();
     }
@@ -56,7 +56,7 @@ public class ProductCommandApplicationTest {
     @Test
     void testCreateProduct_Nok() throws ProductCommandException {
         // Arrange
-        Product product = new Product();
+        ProductModel product = new ProductModel();
         product.setSku("BOOK");
 
         Mockito.when(productQueryService.findBySku(Mockito.any())).thenReturn(Mono.just(product));

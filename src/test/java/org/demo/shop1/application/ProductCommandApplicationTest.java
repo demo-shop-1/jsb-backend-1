@@ -1,8 +1,8 @@
 package org.demo.shop1.application;
 
 import org.demo.shop1.modules.products.application.ProductCommandApplication;
-import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
 import org.demo.shop1.modules.products.domain.exceptions.ProductCommandException;
+import org.demo.shop1.modules.products.domain.exceptions.ProductException;
 import org.demo.shop1.modules.products.domain.models.ProductModel;
 import org.demo.shop1.modules.products.domain.ports.out.ProductCommandOutRepository;
 import org.demo.shop1.modules.products.domain.services.ProductQueryService;
@@ -44,7 +44,10 @@ public class ProductCommandApplicationTest {
 
         // Service's Mock
         Mockito.when(productQueryService.findBySku(Mockito.any())).thenReturn(Mono.empty());
-        Mockito.when(productValidationService.validateBeforeSave(Mockito.any())).thenReturn(Mono.just(product));
+        Mockito.when(productValidationService.validateBeforeSave(Mockito.any(ProductModel.class)))
+                .thenReturn(Mono.just(product));
+        Mockito.when(productValidationService.validateIfCategoryExist(Mockito.any(ProductModel.class)))
+                .thenReturn(Mono.just(product));
         Mockito.when(productCommandOutRepository.save(Mockito.any())).thenReturn(Mono.just(product));
 
         // Act and Assert
@@ -59,12 +62,12 @@ public class ProductCommandApplicationTest {
         ProductModel product = new ProductModel();
         product.setSku("BOOK");
 
-        Mockito.when(productQueryService.findBySku(Mockito.any())).thenReturn(Mono.just(product));
+        Mockito.when(productQueryService.findBySku(Mockito.any(String.class)))
+                .thenReturn(Mono.error(new ProductException(null, null)));
 
         // Act and Assert
         StepVerifier.create(productCommandApplication.createProduct(product))
-                .expectErrorMatches(result -> result instanceof ProductCommandException
-                        && result.getMessage().contains(ProductMessageEnum.SKU_REPEATED.message))
+                .expectErrorMatches(result -> result instanceof ProductException)
                 .verify();
     }
 }

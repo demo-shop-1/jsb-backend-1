@@ -34,47 +34,47 @@ public class ProductValidationApplication extends ProductApplication implements 
 
             // validate SKU
             if (!hasError && ObjectUtil.isBlankString(product.getSku())) {
-                result = ProductUtil.throwError(ProductMessageEnum.SKU_BLANK);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.SKU_BLANK);
                 hasError = true;
             }
             if (!hasError && product.getSku().length() < ProductIntegerEnum.SKU_MIN_SIZE.value) {
-                result = ProductUtil.throwError(ProductMessageEnum.SKU_MIN);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.SKU_MIN);
                 hasError = true;
             }
 
             // validate name
             if (!hasError && ObjectUtil.isBlankString(product.getName())) {
-                result = ProductUtil.throwError(ProductMessageEnum.NAME_BLANK);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.NAME_BLANK);
                 hasError = true;
             }
 
             // validate category
             if (!hasError && product.getCategoryId() == null) {
-                result = ProductUtil.throwError(ProductMessageEnum.CATEGORY_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.CATEGORY_NULL);
                 hasError = true;
             }
 
             // validate description
             if (!hasError && ObjectUtil.isBlankString(product.getDescription())) {
-                result = ProductUtil.throwError(ProductMessageEnum.DESCRIPTION_BLANK);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.DESCRIPTION_BLANK);
                 hasError = true;
             }
 
             // validate unit price
             if (!hasError && product.getUnitPrice() == null) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_PRICE_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_PRICE_NULL);
                 hasError = true;
             } else if (!hasError && product.getUnitPrice() < ProductIntegerEnum.UNIT_PRICE_MIN.value) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_PRICE_MIN);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_PRICE_MIN);
                 hasError = true;
             }
 
             // validate units in stock
             if (!hasError && product.getUnitsInStock() == null) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_IN_STOCK_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_IN_STOCK_NULL);
                 hasError = true;
             } else if (!hasError && product.getUnitsInStock() < ProductIntegerEnum.UNIT_IN_STOCK_MIN.value) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_IN_STOCK_MIN);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_IN_STOCK_MIN);
                 hasError = true;
             }
 
@@ -92,7 +92,7 @@ public class ProductValidationApplication extends ProductApplication implements 
                 })
                 .cast(Product.class)
                 .switchIfEmpty(Mono.defer(() -> {
-                    return ProductUtil.throwError(ProductMessageEnum.CATEGORY_NOT_EXIST);
+                    return ProductUtil.throwValidationError(ProductMessageEnum.CATEGORY_NOT_EXIST);
                 }))
                 .doFirst(() -> startMethod("validateIfCategoryExist"))
                 .doFinally(categoryResult -> endMethod("validateIfCategoryExist"));
@@ -107,44 +107,44 @@ public class ProductValidationApplication extends ProductApplication implements 
 
             // validate name
             if (!hasError && ObjectUtil.isBlankString(product.getName())) {
-                result = ProductUtil.throwError(ProductMessageEnum.NAME_BLANK);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.NAME_BLANK);
                 hasError = true;
             }
 
             // validate category
             if (!hasError && product.getCategoryId() == null) {
-                result = ProductUtil.throwError(ProductMessageEnum.CATEGORY_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.CATEGORY_NULL);
                 hasError = true;
             }
 
             // validate description
             if (!hasError && ObjectUtil.isBlankString(product.getDescription())) {
-                result = ProductUtil.throwError(ProductMessageEnum.DESCRIPTION_BLANK);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.DESCRIPTION_BLANK);
                 hasError = true;
             }
 
             // validate unit price
             if (!hasError && product.getUnitPrice() == null) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_PRICE_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_PRICE_NULL);
                 hasError = true;
             } else if (!hasError && product.getUnitPrice() < ProductIntegerEnum.UNIT_PRICE_MIN.value) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_PRICE_MIN);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_PRICE_MIN);
                 hasError = true;
             }
 
             // validate units in stock
             if (!hasError && product.getUnitsInStock() == null) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_IN_STOCK_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_IN_STOCK_NULL);
                 hasError = true;
             } else if (!hasError && product.getUnitsInStock() < ProductIntegerEnum.UNIT_IN_STOCK_MIN.value) {
-                result = ProductUtil.throwError(ProductMessageEnum.UNIT_IN_STOCK_MIN);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.UNIT_IN_STOCK_MIN);
                 hasError = true;
             }
 
             // validate if it is active
             if (!hasError && product.getIsActive() == null) {
                 infoMethod("validateBeforeUpdate", product.getIsActive().toString());
-                result = ProductUtil.throwError(ProductMessageEnum.IS_ACTIVE_NULL);
+                result = ProductUtil.throwValidationError(ProductMessageEnum.IS_ACTIVE_NULL);
                 hasError = true;
             }
 

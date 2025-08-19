@@ -8,4 +8,6 @@ public interface ProductQueryService {
 
     public Mono<Product> findBySku(String sku);
 
+    public Mono<Product> findOne(String sku);
+
 }

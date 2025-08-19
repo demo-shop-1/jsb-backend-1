@@ -4,6 +4,7 @@ import org.demo.shop1.modules.products.adapters.dto.ProductDeleteRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductDeleteResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveResponseDTO;
+import org.demo.shop1.modules.products.adapters.dto.ProductSingleResponse;
 import org.demo.shop1.modules.products.adapters.dto.ProductUpdateRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductUpdateResponseDTO;
 import org.demo.shop1.modules.products.adapters.entities.ProductEntity;
@@ -133,6 +134,22 @@ public class ProductMapper {
             productResult.setSku(product.getSku());
             productResult.setName(product.getName());
             productResult.setCategoryId(product.getCategoryId());
+
+            return Mono.just(productResult);
+        });
+    }
+
+    public static Mono<ProductSingleResponse> toProductSingleResponse(ProductModel product) {
+        return Mono.defer(() -> {
+            ProductSingleResponse productResult = new ProductSingleResponse();
+            productResult.setSku(product.getSku());
+            productResult.setName(product.getName());
+            productResult.setCategoryId(product.getCategoryId());
+            productResult.setDescription(product.getDescription());
+            productResult.setUnitPrice(product.getUnitPrice());
+            productResult.setImageUrl(product.getImageUrl());
+            productResult.setUnitsInStock(product.getUnitsInStock());
+            productResult.setIsActive(product.getIsActive());
 
             return Mono.just(productResult);
         });

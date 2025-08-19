@@ -19,7 +19,8 @@ public enum ProductMessageEnum {
     UNIT_IN_STOCK_MIN("PROD-10", "Unit In Stock has to be a positive value"),
     CATEGORY_NOT_EXIST("PROD-11", "This category does not exist"),
     SKU_NOT_EXIST("PROD-12", "This SKU does not exist"),
-    IS_ACTIVE_NULL("PROD-13", "Field isActive is empty");
+    IS_ACTIVE_NULL("PROD-13", "Field isActive is empty"),
+    PRODUCT_NOT_EXIST("PROD-14", "There is no product with this SKU");
 
     private static final Map<String, ProductMessageEnum> BY_CODE = new HashMap<>();
     private static final Map<String, ProductMessageEnum> BY_MESSAGE = new HashMap<>();

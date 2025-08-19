@@ -30,7 +30,7 @@ public class ProductCommandController extends ProductController {
         }
 
         @Bean
-        public RouterFunction<ServerResponse> productRoute() {
+        public RouterFunction<ServerResponse> productCommandRoutes() {
                 return RouterFunctions.route()
                                 .POST("/product/save", request -> request.bodyToMono(ProductSaveRequestDTO.class)
                                                 .doFirst(() -> startMethod("/product/save"))

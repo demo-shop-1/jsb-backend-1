@@ -39,7 +39,7 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                 .flatMap(existingProduct -> {
                     infoMethod("createProduct",
                             String.format("Exists a product with this SKU: %s", existingProduct.getSku()));
-                    return ProductUtil.throwError(ProductMessageEnum.SKU_REPEATED);
+                    return ProductUtil.throwValidationError(ProductMessageEnum.SKU_REPEATED);
                 })
                 .switchIfEmpty(Mono.defer(() -> productValidationService.validateBeforeSave(product)
                         .flatMap(productValidated -> productValidationService.validateIfCategoryExist(product))
@@ -83,7 +83,7 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                     // validate SKU
                     infoMethod("updateProduct",
                             String.format("There's no a product with this SKU: %s", product.getSku()));
-                    return ProductUtil.throwError(ProductMessageEnum.SKU_NOT_EXIST);
+                    return ProductUtil.throwValidationError(ProductMessageEnum.SKU_NOT_EXIST);
                 }))
                 .doOnSuccess(productResult -> endMethod("updateProduct"));
     }
@@ -101,7 +101,7 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                     // validate SKU
                     infoMethod("deleteProduct",
                             String.format("There's no a product with this SKU: %s", product.getSku()));
-                    return ProductUtil.throwError(ProductMessageEnum.SKU_NOT_EXIST);
+                    return ProductUtil.throwValidationError(ProductMessageEnum.SKU_NOT_EXIST);
                 }))
                 .doOnSuccess(productResult -> endMethod("deleteProduct"));
     }

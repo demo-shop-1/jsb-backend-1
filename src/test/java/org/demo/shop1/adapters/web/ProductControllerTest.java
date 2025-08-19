@@ -31,7 +31,7 @@ public class ProductControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        webTestClient = WebTestClient.bindToRouterFunction(productController.productRoute()).build();
+        webTestClient = WebTestClient.bindToRouterFunction(productController.productCommandRoutes()).build();
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.demo.shop1.modules.products.adapters.mappers;
 
 import org.demo.shop1.modules.products.adapters.dto.ProductAllResponseDTO;
-import org.demo.shop1.modules.products.adapters.dto.ProductDeleteRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductDeleteResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveResponseDTO;
@@ -82,17 +81,6 @@ public class ProductMapper {
             productResult.setImageUrl(product.getImageUrl());
             productResult.setUnitsInStock(product.getUnitsInStock());
             productResult.setIsActive(product.getIsActive());
-
-            return Mono.just(productResult);
-        });
-    }
-
-    public static Mono<ProductModel> toProductModel(ProductDeleteRequestDTO product) {
-
-        return Mono.defer(() -> {
-
-            ProductModel productResult = new ProductModel();
-            productResult.setSku(product.getSku());
 
             return Mono.just(productResult);
         });

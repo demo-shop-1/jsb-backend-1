@@ -1,6 +1,5 @@
 package org.demo.shop1.modules.products.adapters.web;
 
-import org.demo.shop1.modules.products.adapters.dto.ProductDeleteRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductUpdateRequestDTO;
@@ -68,16 +67,16 @@ public class ProductCommandController extends ProductController {
                                                                 .bodyValue(productResponseDTO))
                                                 .doOnSuccess(serverResponse -> endMethod(
                                                                 "/product/update")))
-                                .DELETE("/product/delete", request -> request.bodyToMono(ProductDeleteRequestDTO.class)
-                                                .doFirst(() -> startMethod("/product/delete"))
-                                                .flatMap(ProductMapper::toProductModel)
-                                                .flatMap(productCommandApplication::deleteProduct)
-                                                .cast(ProductModel.class)
-                                                .flatMap(ProductMapper::toProductDeleteResponse)
-                                                .flatMap(productResponseDTO -> ServerResponse.ok()
-                                                                .bodyValue(productResponseDTO))
-                                                .doOnSuccess(serverResponse -> endMethod(
-                                                                "/product/delete")))
+                                .DELETE("/product/delete/{id}",
+                                                request -> productCommandApplication
+                                                                .deleteProduct(request.pathVariable("id"))
+                                                                .doFirst(() -> startMethod("/product/delete"))
+                                                                .cast(ProductModel.class)
+                                                                .flatMap(ProductMapper::toProductDeleteResponse)
+                                                                .flatMap(productResponseDTO -> ServerResponse.ok()
+                                                                                .bodyValue(productResponseDTO))
+                                                                .doOnSuccess(serverResponse -> endMethod(
+                                                                                "/product/delete")))
                                 .build();
         }
 }

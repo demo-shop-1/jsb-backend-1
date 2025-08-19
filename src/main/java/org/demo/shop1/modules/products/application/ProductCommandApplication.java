@@ -89,8 +89,8 @@ public class ProductCommandApplication extends ProductApplication implements Pro
     }
 
     @Override
-    public Mono<Product> deleteProduct(ProductModel product) {
-        return productQueryService.findBySku(product.getSku())
+    public Mono<Product> deleteProduct(String sku) {
+        return productQueryService.findBySku(sku)
                 .doFirst(() -> startMethod("deleteProduct"))
                 .cast(ProductModel.class)
                 .flatMap(existingProduct -> {
@@ -100,9 +100,9 @@ public class ProductCommandApplication extends ProductApplication implements Pro
                 .switchIfEmpty(Mono.defer(() -> {
                     // validate SKU
                     infoMethod("deleteProduct",
-                            String.format("There's no a product with this SKU: %s", product.getSku()));
+                            String.format("There's no a product with this SKU: %s", sku));
                     return ProductUtil.throwValidationError(ProductMessageEnum.SKU_NOT_EXIST);
                 }))
-                .doOnSuccess(productResult -> endMethod("deleteProduct"));
+                .doFinally(productResult -> endMethod("deleteProduct"));
     }
 }

@@ -1,13 +1,15 @@
 package org.demo.shop1.modules.products.adapters.mappers;
 
+import org.demo.shop1.modules.products.adapters.dto.ProductAllResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductDeleteRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductDeleteResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductSaveResponseDTO;
-import org.demo.shop1.modules.products.adapters.dto.ProductSingleResponse;
+import org.demo.shop1.modules.products.adapters.dto.ProductSingleResponseDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductUpdateRequestDTO;
 import org.demo.shop1.modules.products.adapters.dto.ProductUpdateResponseDTO;
 import org.demo.shop1.modules.products.adapters.entities.ProductEntity;
+import org.demo.shop1.modules.products.application.dto.ProductAllAppDTO;
 import org.demo.shop1.modules.products.domain.models.ProductModel;
 
 import reactor.core.publisher.Mono;
@@ -139,9 +141,9 @@ public class ProductMapper {
         });
     }
 
-    public static Mono<ProductSingleResponse> toProductSingleResponse(ProductModel product) {
+    public static Mono<ProductSingleResponseDTO> toProductSingleResponse(ProductModel product) {
         return Mono.defer(() -> {
-            ProductSingleResponse productResult = new ProductSingleResponse();
+            ProductSingleResponseDTO productResult = new ProductSingleResponseDTO();
             productResult.setSku(product.getSku());
             productResult.setName(product.getName());
             productResult.setCategoryId(product.getCategoryId());
@@ -150,6 +152,33 @@ public class ProductMapper {
             productResult.setImageUrl(product.getImageUrl());
             productResult.setUnitsInStock(product.getUnitsInStock());
             productResult.setIsActive(product.getIsActive());
+
+            return Mono.just(productResult);
+        });
+    }
+
+    public static ProductSingleResponseDTO toProductSingleResponseDTO(ProductModel product) {
+        ProductSingleResponseDTO productResult = new ProductSingleResponseDTO();
+        productResult.setSku(product.getSku());
+        productResult.setName(product.getName());
+        productResult.setCategoryId(product.getCategoryId());
+        productResult.setDescription(product.getDescription());
+        productResult.setUnitPrice(product.getUnitPrice());
+        productResult.setImageUrl(product.getImageUrl());
+        productResult.setUnitsInStock(product.getUnitsInStock());
+        productResult.setIsActive(product.getIsActive());
+
+        return productResult;
+    }
+
+    public static Mono<ProductAllResponseDTO> toProductAllResponse(ProductAllAppDTO product) {
+        return Mono.defer(() -> {
+            ProductAllResponseDTO productResult = new ProductAllResponseDTO();
+            productResult.setContent(product.getContent()
+                    .stream().map(ProductMapper::toProductSingleResponseDTO).toList());
+            productResult.setPage(product.getPage());
+            productResult.setSize(product.getSize());
+            productResult.setTotalElements(product.getTotalElements());
 
             return Mono.just(productResult);
         });

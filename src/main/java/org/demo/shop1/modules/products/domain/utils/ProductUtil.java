@@ -2,6 +2,8 @@ package org.demo.shop1.modules.products.domain.utils;
 
 import org.demo.shop1.modules.products.domain.Product;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
+import org.demo.shop1.modules.products.domain.enums.ProductPaginationEnum;
+import org.demo.shop1.modules.products.domain.exceptions.ProductPaginationException;
 import org.demo.shop1.modules.products.domain.exceptions.ProductQueryException;
 import org.demo.shop1.modules.products.domain.exceptions.ProductValidationException;
 
@@ -14,5 +16,9 @@ public class ProductUtil {
 
     public static Mono<Product> throwQueryError(ProductMessageEnum message) {
         return Mono.error(new ProductQueryException(message.code, message.message));
+    }
+
+    public static Mono<Product> throwPaginationError(ProductPaginationEnum message) {
+        return Mono.error(new ProductPaginationException(message.code, message.message));
     }
 }

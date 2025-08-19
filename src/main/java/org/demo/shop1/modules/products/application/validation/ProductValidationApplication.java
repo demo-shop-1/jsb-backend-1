@@ -1,10 +1,13 @@
 package org.demo.shop1.modules.products.application.validation;
 
+import java.util.Optional;
+
 import org.demo.shop1.modules.categories.domain.services.CategoryQueryService;
 import org.demo.shop1.modules.products.application.ProductApplication;
 import org.demo.shop1.modules.products.domain.Product;
 import org.demo.shop1.modules.products.domain.enums.ProductIntegerEnum;
 import org.demo.shop1.modules.products.domain.enums.ProductMessageEnum;
+import org.demo.shop1.modules.products.domain.enums.ProductPaginationEnum;
 import org.demo.shop1.modules.products.domain.models.ProductModel;
 import org.demo.shop1.modules.products.domain.services.ProductValidationService;
 import org.demo.shop1.modules.products.domain.utils.ProductUtil;
@@ -152,5 +155,25 @@ public class ProductValidationApplication extends ProductApplication implements 
         })
                 .doFirst(() -> startMethod("validateBeforeUpdate"))
                 .doFinally(result -> endMethod("validateBeforeUpdate"));
+    }
+
+    @Override
+    public Mono<Product> validatePagination(Optional<String> page, Optional<String> size) {
+        return Mono.defer(() -> {
+            Mono<Product> result = Mono.empty();
+            Boolean hasError = false;
+
+            if (!hasError && (!page.isPresent() || Integer.parseInt(page.get()) < 0)) {
+                result = ProductUtil.throwPaginationError(ProductPaginationEnum.PAGE_INVALID);
+                hasError = true;
+            }
+
+            if (!hasError && (!size.isPresent() || Integer.parseInt(size.get()) < 0)) {
+                result = ProductUtil.throwPaginationError(ProductPaginationEnum.SIZE_INVALID);
+                hasError = true;
+            }
+
+            return result;
+        });
     }
 }

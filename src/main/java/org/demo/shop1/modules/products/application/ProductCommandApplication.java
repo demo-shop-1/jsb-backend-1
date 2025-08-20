@@ -31,7 +31,6 @@ public class ProductCommandApplication extends ProductApplication implements Pro
 
     @Override
     public Mono<Product> createProduct(ProductModel product) {
-
         return productQueryService.findBySku(product.getSku())
                 .doFirst(() -> startMethod("createProduct"))
                 .cast(ProductModel.class)

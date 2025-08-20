@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import org.demo.shop1.modules.categories.adapters.entities.CategoryEntity;
 import org.demo.shop1.modules.categories.adapters.mappers.CategoryMapper;
+import org.demo.shop1.modules.categories.domain.enums.CategoryFieldEnum;
 import org.demo.shop1.modules.categories.domain.models.CategoryModel;
 import org.demo.shop1.modules.categories.domain.ports.out.CategoryQueryOutRepository;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -23,8 +24,8 @@ public class CategoryQueryMongoRepository implements CategoryQueryOutRepository 
     @Override
     public Mono<CategoryModel> findById(Integer id) {
         return mongoTemplate.findOne(
-                new Query().addCriteria(Criteria.where("id").is(id)),
-                CategoryEntity.class, "categories")
+                new Query().addCriteria(Criteria.where(CategoryFieldEnum.ID.value).is(id)),
+                CategoryEntity.class, CategoryFieldEnum.COLLECTION_NAME.value)
                 .flatMap((category) -> {
                     return Mono.just(CategoryMapper.toCategory(category));
                 });
@@ -33,8 +34,8 @@ public class CategoryQueryMongoRepository implements CategoryQueryOutRepository 
     @Override
     public Mono<CategoryModel> findByName(String name) {
         return mongoTemplate.findOne(
-                new Query().addCriteria(Criteria.where("name").regex(String.format("^%s$", Pattern.quote(name)), "i")),
-                CategoryEntity.class, "categories")
+                new Query().addCriteria(Criteria.where(CategoryFieldEnum.NAME.value).regex(String.format("^%s$", Pattern.quote(name)), "i")),
+                CategoryEntity.class, CategoryFieldEnum.COLLECTION_NAME.value)
                 .flatMap(category -> {
                     return Mono.just(CategoryMapper.toCategory(category));
                 });

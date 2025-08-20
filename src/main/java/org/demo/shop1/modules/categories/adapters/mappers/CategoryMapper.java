@@ -15,6 +15,8 @@ public class CategoryMapper {
         categoryResult.setName(category.getName());
         categoryResult.setDescription(category.getDescription());
         categoryResult.setIsActive(category.getIsActive());
+        categoryResult.setDateCreated(category.getDateCreated());
+        categoryResult.setLastUpdated(category.getLastUpdated());
 
         return categoryResult;
     }
@@ -25,6 +27,8 @@ public class CategoryMapper {
         categoryResult.setName(category.getName());
         categoryResult.setDescription(category.getDescription());
         categoryResult.setIsActive(category.getIsActive());
+        categoryResult.setDateCreated(category.getDateCreated());
+        categoryResult.setLastUpdated(category.getLastUpdated());
 
         return categoryResult;
     }

@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class CategorySaveRequestDTO extends CategoryDTO{
+public class CategoryCreateRequestDTO extends CategoryDTO{
     
     private String description;
 }

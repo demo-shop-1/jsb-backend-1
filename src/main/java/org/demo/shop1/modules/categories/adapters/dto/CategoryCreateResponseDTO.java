@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class CategorySaveResponseDTO extends CategoryDTO{
+public class CategoryCreateResponseDTO extends CategoryDTO{
 
     private String description;
     private Boolean isActive;

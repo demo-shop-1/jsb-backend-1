@@ -1,7 +1,7 @@
 package org.demo.shop1.modules.categories.application;
 
 import org.demo.shop1.modules.categories.domain.enums.CategoryMessageEnum;
-import org.demo.shop1.modules.categories.domain.models.Category;
+import org.demo.shop1.modules.categories.domain.models.CategoryModel;
 import org.demo.shop1.modules.categories.domain.ports.out.CategoryCommandOutRepository;
 import org.demo.shop1.modules.categories.domain.services.CategoryCommandService;
 import org.demo.shop1.modules.categories.domain.services.CategoryQueryService;
@@ -25,7 +25,7 @@ public class CategoryCommandApplication extends CategoryApplication implements C
     }
 
     @Override
-    public Mono<Category> createCategory(Category category) {
+    public Mono<CategoryModel> createCategory(CategoryModel category) {
         // Validate unique ID
         // Validate unique NAME
         return categoryQueryApplication.findById(category.getId())

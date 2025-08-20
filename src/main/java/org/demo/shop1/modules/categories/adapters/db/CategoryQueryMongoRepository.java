@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import org.demo.shop1.modules.categories.adapters.entities.CategoryEntity;
 import org.demo.shop1.modules.categories.adapters.mappers.CategoryMapper;
-import org.demo.shop1.modules.categories.domain.models.Category;
+import org.demo.shop1.modules.categories.domain.models.CategoryModel;
 import org.demo.shop1.modules.categories.domain.ports.out.CategoryQueryOutRepository;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,7 +21,7 @@ public class CategoryQueryMongoRepository implements CategoryQueryOutRepository 
     private final ReactiveMongoTemplate mongoTemplate;
 
     @Override
-    public Mono<Category> findById(Integer id) {
+    public Mono<CategoryModel> findById(Integer id) {
         return mongoTemplate.findOne(
                 new Query().addCriteria(Criteria.where("id").is(id)),
                 CategoryEntity.class, "categories")
@@ -31,7 +31,7 @@ public class CategoryQueryMongoRepository implements CategoryQueryOutRepository 
     }
 
     @Override
-    public Mono<Category> findByName(String name) {
+    public Mono<CategoryModel> findByName(String name) {
         return mongoTemplate.findOne(
                 new Query().addCriteria(Criteria.where("name").regex(String.format("^%s$", Pattern.quote(name)), "i")),
                 CategoryEntity.class, "categories")

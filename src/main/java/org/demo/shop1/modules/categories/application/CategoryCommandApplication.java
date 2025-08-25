@@ -35,7 +35,7 @@ public class CategoryCommandApplication extends CategoryApplication implements C
                 .cast(CategoryModel.class)
                 .flatMap(existingCategory -> {
                     infoMethod("createCategory",
-                            String.format("Exist this ID:", existingCategory.getId()));
+                            String.format("Exist this ID: %s", existingCategory.getId()));
                     return CategoryUtil.throwValidationError(CategoryMessageEnum.ID_REPEATED);
                 })
                 .switchIfEmpty(
@@ -44,7 +44,7 @@ public class CategoryCommandApplication extends CategoryApplication implements C
                                 .cast(CategoryModel.class)
                                 .flatMap(existingCategory -> {
                                     infoMethod("createCategory",
-                                            String.format("Exist this name:", existingCategory.getName()));
+                                            String.format("Exist this name: %s", existingCategory.getName()));
                                     return CategoryUtil.throwValidationError(CategoryMessageEnum.NAME_REPEATED);
                                 })
                                 .switchIfEmpty(Mono.defer(() -> {

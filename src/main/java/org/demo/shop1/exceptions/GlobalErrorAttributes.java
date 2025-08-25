@@ -1,6 +1,7 @@
 package org.demo.shop1.exceptions;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -31,7 +32,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
 
     global.setStatus(map.get("error").toString());
     global.setStatusCode(Integer.parseInt(map.get("status").toString()));
-    global.setDate(Calendar.getInstance().getTime().toString());
+    global.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
 
     return new ObjectMapper().convertValue(global,
         new TypeReference<Map<String, Object>>() {

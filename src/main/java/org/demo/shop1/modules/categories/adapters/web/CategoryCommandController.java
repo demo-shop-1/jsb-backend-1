@@ -1,7 +1,8 @@
 package org.demo.shop1.modules.categories.adapters.web;
 
-import org.demo.shop1.modules.categories.adapters.dto.CategorySaveRequestDTO;
+import org.demo.shop1.modules.categories.adapters.dto.CategoryCreateRequestDTO;
 import org.demo.shop1.modules.categories.adapters.mappers.CategoryMapper;
+import org.demo.shop1.modules.categories.domain.models.CategoryModel;
 import org.demo.shop1.modules.categories.domain.services.CategoryCommandService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +28,14 @@ public class CategoryCommandController extends CategoryController {
     public RouterFunction<ServerResponse> categoryRoute() {
         return RouterFunctions.route()
                 .POST("/category/save",
-                        request -> request.bodyToMono(CategorySaveRequestDTO.class)
-                                .doFirst(() -> startMethod("/category/save"))
+                        request -> request.bodyToMono(CategoryCreateRequestDTO.class)
+                                .doFirst(() -> startMethod("createCategory"))
                                 .flatMap(CategoryMapper::toCategory)
                                 .flatMap(categoryCommandApplication::createCategory)
+                                .cast(CategoryModel.class)
                                 .flatMap(CategoryMapper::toCategorySaveResponse)
                                 .flatMap(categoryResponse -> ServerResponse.ok().bodyValue(categoryResponse))
-                                .doOnSuccess(response -> endMethod("/category/save")))
+                                .doOnSuccess(response -> endMethod("/createCategory")))
                 .build();
     }
 }

@@ -1,10 +1,11 @@
 package org.demo.shop1.modules.categories.domain.services;
 
-import org.demo.shop1.modules.categories.domain.models.Category;
+import org.demo.shop1.modules.categories.domain.Category;
+import org.demo.shop1.modules.categories.domain.models.CategoryModel;
 
 import reactor.core.publisher.Mono;
 
 public interface CategoryCommandService {
 
-    Mono<Category> createCategory(Category category);
+    Mono<Category> createCategory(CategoryModel category);
 }

@@ -1,5 +1,7 @@
 package org.demo.shop1.modules.categories.adapters.entities;
 
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -27,4 +29,9 @@ public class CategoryEntity {
 
     @NotNull(message = "IsActive is required")
     private Boolean isActive;
+
+    @NotNull(message = "Date Created is required")
+    private Date dateCreated;
+
+    private Date lastUpdated;
 }

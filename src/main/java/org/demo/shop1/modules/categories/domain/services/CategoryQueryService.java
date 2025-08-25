@@ -1,6 +1,6 @@
 package org.demo.shop1.modules.categories.domain.services;
 
-import org.demo.shop1.modules.categories.domain.models.Category;
+import org.demo.shop1.modules.categories.domain.Category;
 
 import reactor.core.publisher.Mono;
 

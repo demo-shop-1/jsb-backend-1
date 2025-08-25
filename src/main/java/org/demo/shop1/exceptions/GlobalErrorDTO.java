@@ -9,5 +9,4 @@ public class GlobalErrorDTO {
     private String status;
     private int statusCode;
     private String date;
-
 }
